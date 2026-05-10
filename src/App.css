@@ -1,0 +1,310 @@
+/* ── Global reset ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0d0d0d;
+  color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Home page — ZegoCloud ──────────────────────────────────────────────── */
+
+.join-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.join-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+.join-box h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.join-box .subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.join-box input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.join-box input:focus {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.07);
+}
+
+.join-box input::placeholder { color: rgba(255, 255, 255, 0.28); }
+
+.join-box button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, opacity 0.18s, transform 0.1s;
+}
+
+.join-box button:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); }
+.join-box button:active:not(:disabled) { transform: translateY(0); }
+.join-box button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Room page ──────────────────────────────────────────────────────────── */
+
+.room-root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.room-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Join overlay ───────────────────────────────────────────────────────── */
+
+.join-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto;
+  padding: 24px 16px;
+}
+
+.join-panel {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.join-panel h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.room-id-label {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.room-id-label code {
+  background: rgba(99, 179, 237, 0.14);
+  color: #93c5fd;
+  padding: 2px 9px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* ── Credential warning banner ──────────────────────────────────────────── */
+
+.cred-warning {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: #fef08a;
+}
+
+.cred-warning strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.87rem;
+}
+
+.cred-warning a {
+  color: #fde047;
+  text-decoration: underline;
+}
+
+.cred-warning p {
+  margin-bottom: 8px;
+}
+
+.cred-warning code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.8rem;
+}
+
+.cred-snippet {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.78rem;
+  white-space: pre;
+  overflow-x: auto;
+  color: #d4f4a0;
+  margin-top: 4px;
+}
+
+/* ── Name input ─────────────────────────────────────────────────────────── */
+
+.input-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.join-panel input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.join-panel input:focus {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.07);
+}
+
+.join-panel input::placeholder { color: rgba(255, 255, 255, 0.22); }
+.join-panel input:disabled     { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.join-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, opacity 0.18s, transform 0.1s;
+}
+
+.join-btn:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); }
+.join-btn:active:not(:disabled) { transform: translateY(0); }
+.join-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.copy-btn {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Error box ──────────────────────────────────────────────────────────── */
+
+.join-error {
+  margin-top: 18px;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+/* Multi-line structured error messages use <pre> to preserve whitespace */
+.error-pre {
+  font-family: inherit;
+  font-size: 0.83rem;
+  color: #fca5a5;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 12px;
+}
+
+.retry-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  background: rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.retry-btn:hover { background: rgba(220, 38, 38, 0.28); }
