@@ -10,15 +10,30 @@ export default defineConfig({
 
   build: {
     outDir: 'dist',
-    sourcemap: false,       // disable in production for smaller bundle
+    sourcemap: false,
     chunkSizeWarningLimit: 1500,
+
     rollupOptions: {
       output: {
-        // Split large vendor chunks to improve caching
-        manualChunks: {
-          react:    ['react', 'react-dom'],
-          router:   ['react-router-dom'],
-          zegocloud: ['@zegocloud/zego-uikit-prebuilt'],
+        manualChunks(id) {
+          if (id.includes('react-router-dom')) {
+            return 'router'
+          }
+
+          if (id.includes('@zegocloud/zego-uikit-prebuilt')) {
+            return 'zegocloud'
+          }
+
+          if (
+            id.includes('react') ||
+            id.includes('react-dom')
+          ) {
+            return 'react'
+          }
+
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
         },
       },
     },
