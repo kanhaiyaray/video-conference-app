@@ -1,185 +1,273 @@
-# Video Call (ZegoCloud) — Vercel Deployment
+# 📹 Video‑Conference‑App — Real‑Time HD Video Calling in the Browser
 
-A React + Vite video-calling app powered by [ZegoCloud](https://www.zegocloud.com/).
-Designed to deploy **end-to-end on Vercel** — the React frontend ships as static
-files and the token endpoint runs as a Vercel Serverless Function. **No other
-platform is required.**
+A real-time peer-to-peer video calling web application built with **React.js**, **Vite**, and **ZegoCloud UIKit**. Users can create or join video rooms instantly using shareable invite links — no account required.
 
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Vercel                               │
-│                                                             │
-│   Static frontend  ──────►  Serverless Function             │
-│   (dist/, React)            api/token.js  →  /api/token     │
-│                             (generates ZegoCloud kitToken)  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-- **Frontend** — built by `vite build` to `dist/`, served by Vercel's CDN.
-- **Token API** — `api/token.js` is auto-detected by Vercel and exposed at
-  `/api/token`. It signs a ZegoCloud `kitToken` server-side so your
-  `ZEGO_SERVER_SECRET` never reaches the browser.
-- **SPA routing** — `vercel.json` rewrites every non-`/api/*` path to
-  `index.html` so React Router deep-links work on refresh.
+🔗 **Live Demo:** [react-js-video-call-app.vercel.app](https://react-js-video-call-app.vercel.app/)
 
 ---
 
-## Project layout
+## ✨ Features
+
+- 🎥 **Real-time video & audio calling** powered by ZegoCloud UIKit
+- 🔗 **Shareable invite links** — share a room link with anyone to join instantly
+- 🏠 **Room-based routing** — each call has a unique room ID (e.g. `/room/5`)
+- 👤 **Custom display names** — users set their name before joining
+- 🔐 **Secure server-side token generation** — tokens generated via Node.js `crypto`, never exposed in frontend
+- 📱 **Responsive UI** — works on desktop and mobile browsers
+- ⚡ **Fast builds** with Vite v8 + Rolldown bundler
+- ☁️ **Zero-config deployment** on Vercel with serverless API routes
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React.js 18, React Router DOM |
+| Build Tool | Vite v8 (Rolldown bundler) |
+| Video SDK | ZegoCloud UIKit Prebuilt |
+| API / Backend | Vercel Serverless Functions (Node.js) |
+| Token Auth | Node.js `crypto` (AES-128-CBC, Token04) |
+| Deployment | Vercel |
+| Styling | CSS Modules / Inline styles |
+
+---
+
+## 📁 Project Structure
 
 ```
-.
+React.Js_Video_Call_App/
+│
 ├── api/
-│   └── token.js              # Vercel Serverless Function → /api/token
-├── server/
-│   └── token-server.js       # Local-dev token server (not deployed)
-├── src/                      # React app
-├── index.html
-├── vite.config.js
-├── vercel.json               # Vercel config (build + SPA rewrites)
-├── package.json
-├── .env.example              # Copy to .env for local dev
-└── README.md
+│   └── token.js              # Vercel serverless function — generates ZegoCloud Token04
+│                             # Uses Node.js crypto only (NO browser SDK here)
+│
+├── src/
+│   ├── main.jsx              # React entry point
+│   ├── App.jsx               # Root component with routing
+│   └── components/
+│       ├── RoomPage.jsx      # Video call room with ZegoCloud UIKit
+│       └── LobbyPage.jsx     # Join room form (name input, invite link)
+│
+├── public/
+│   └── vite.svg              # App favicon
+│
+├── .env                      # Local environment variables (NOT committed)
+├── .env.example              # Template for required env vars
+├── vite.config.js            # Vite build config with chunk splitting & warning suppression
+├── vercel.json               # Vercel deployment config (SPA routing + API functions)
+├── package.json              # Dependencies & scripts
+└── README.md                 # This file
 ```
 
 ---
 
-## Prerequisites
+## ⚙️ Environment Variables
 
-- Node.js **18+**
-- A free [ZegoCloud account](https://console.zegocloud.com) — grab your
-  **AppID** and **ServerSecret** from the console.
-- A [Vercel account](https://vercel.com) (free tier is fine).
+Create a `.env` file in the project root:
+
+```env
+VITE_ZEGO_APP_ID=your_numeric_app_id
+VITE_ZEGO_SERVER_SECRET=your_32_character_server_secret
+```
+
+> ⚠️ **Never commit your `.env` file.** It is already in `.gitignore`.
+
+### How to get your ZegoCloud credentials
+
+1. Sign up free at [console.zegocloud.com](https://console.zegocloud.com)
+2. Create a new project
+3. Copy your **AppID** (numeric) and **Server Secret** (32-char string)
+4. Paste them into your `.env` file
 
 ---
 
-## Local development
+## 🚀 Getting Started (Local Development)
+
+### Prerequisites
+
+- Node.js `20.x` or higher
+- npm `9+`
+
+### Install & Run
 
 ```bash
-# 1. Install dependencies
+# 1. Clone the repository
+git clone https://github.com/kanhaiyaray/React.Js_Video_Call_App.git
+cd React.Js_Video_Call_App
+
+# 2. Install dependencies
 npm install
 
-# 2. Configure environment
+# 3. Set up environment variables
 cp .env.example .env
-# then edit .env and paste your ZEGO_APP_ID + ZEGO_SERVER_SECRET
+# Edit .env with your ZegoCloud credentials
 
-# 3. Run the local token server (terminal 1)
-npm run token-server
-# → http://localhost:3001/token?roomID=...
-
-# 4. Run the Vite dev server (terminal 2)
+# 4. Start development server
 npm run dev
-# → http://localhost:5173
 ```
 
-The frontend reads `VITE_TOKEN_SERVER_URL` from `.env`. For local dev keep it
-as `http://localhost:3001`. In production on Vercel, **leave it empty** — the
-app will call the same-origin `/api/token` route automatically.
+App runs at **http://localhost:5173**
+
+### Available Scripts
+
+```bash
+npm run dev      # Start development server (hot reload)
+npm run build    # Build for production
+npm run preview  # Preview production build locally
+```
 
 ---
 
-## Deploy to Vercel
+## ☁️ Deploying to Vercel
 
-1. Push this repo to GitHub / GitLab / Bitbucket.
-2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
-3. Vercel auto-detects Vite. Defaults are correct — no overrides needed:
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist`
-   - **Install Command:** `npm install`
-4. Open **Settings → Environment Variables** and add:
+### Step 1 — Push to GitHub
 
-   | Name                 | Value                          | Environments              |
-   |----------------------|--------------------------------|---------------------------|
-   | `ZEGO_APP_ID`        | your ZegoCloud AppID (number)  | Production, Preview, Dev  |
-   | `ZEGO_SERVER_SECRET` | your ZegoCloud ServerSecret    | Production, Preview, Dev  |
+```bash
+git add .
+git commit -m "your message"
+git push origin main
+```
 
-   > Do **not** add `VITE_TOKEN_SERVER_URL` in production — leaving it unset
-   > makes the frontend call `/api/token` on the same origin, which is what
-   > you want.
+### Step 2 — Import project on Vercel
 
-5. Click **Deploy**. Done.
+1. Go to [vercel.com](https://vercel.com) → **Add New Project**
+2. Import your GitHub repository
+3. Vercel auto-detects Vite — no framework config needed
+
+### Step 3 — Set Environment Variables in Vercel Dashboard
+
+Go to **Project → Settings → Environment Variables** and add:
+
+| Key | Value |
+|---|---|
+| `VITE_ZEGO_APP_ID` | Your numeric App ID |
+| `VITE_ZEGO_SERVER_SECRET` | Your 32-char Server Secret |
+
+> These must be added in the **Vercel Dashboard** — `.env` files are not deployed.
+
+### Step 4 — Disable Deployment Protection (for shareable links)
+
+Go to **Project → Settings → Deployment Protection** → Set to **Disabled** or **Production only**
+
+This allows anyone with your invite link to join without a Vercel login prompt.
+
+### Step 5 — Redeploy
+
+After adding env vars, trigger a new deployment:
+**Vercel Dashboard → Deployments → Redeploy**
 
 ---
 
-## Environment variables reference
+## 🔧 Key Configuration Files
 
-| Variable                | Where        | Required | Notes                                             |
-|-------------------------|--------------|----------|---------------------------------------------------|
-| `ZEGO_APP_ID`           | Server       | yes      | ZegoCloud AppID. Used by `api/token.js`.          |
-| `ZEGO_SERVER_SECRET`    | Server       | yes      | ZegoCloud ServerSecret. Never expose to client.   |
-| `VITE_TOKEN_SERVER_URL` | Frontend     | dev only | Local dev: `http://localhost:3001`. Prod: unset.  |
-| `PORT`                  | Local server | no       | Port for `server/token-server.js` (default 3001). |
-
-`VITE_*` variables are inlined into the client bundle at build time, so never
-put secrets there. `ZEGO_APP_ID` / `ZEGO_SERVER_SECRET` (no `VITE_` prefix)
-stay server-side inside the Vercel function.
-
----
-
-## How the token endpoint works
-
-`api/token.js` is a standard Vercel Serverless Function (Node.js runtime).
-Vercel automatically:
-
-1. Detects any file under `/api/*` and deploys it as a function.
-2. Routes `GET /api/token?roomID=...&userID=...&userName=...` to the handler.
-3. Injects `process.env.ZEGO_APP_ID` and `process.env.ZEGO_SERVER_SECRET`
-   from your project's environment variables.
-
-Response shape:
+### `vercel.json`
 
 ```json
-{ "kitToken": "..." }
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)",     "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/token.js": {
+      "maxDuration": 10
+    }
+  }
+}
 ```
 
-The frontend then passes `kitToken` to `ZegoUIKitPrebuilt.create(kitToken)`
-to join a room.
+**Why the catch-all rewrite?** This app uses React Router (client-side routing). Without the `/(.*) → /index.html` rewrite, refreshing `/room/5` or opening a shared link returns `404: NOT_FOUND` because Vercel looks for a file at that path instead of serving the React app.
 
-> The bundled `generateKitTokenForTest` is fine for development and
-> small-scale production. For high-traffic apps, switch to ZegoCloud's
-> server-side token generation with proper expiry / signature rotation.
+### `vite.config.js`
 
----
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-## Troubleshooting
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    chunkSizeWarningLimit: 6000,
+    rolldownOptions: {
+      onwarn(warning, defaultHandler) {
+        // ZegoCloud SDK uses eval internally — suppress third-party warning
+        if (warning.code === 'EVAL') return;
+        defaultHandler(warning);
+      },
+    },
+  },
+})
+```
 
-**"roomID is required" on `/api/token`** — pass `?roomID=some_room` in the
-URL. The frontend does this automatically; check that your room ID is non-empty.
+### `api/token.js` (Serverless Function)
 
-**Token endpoint returns `500`** — the most common cause is missing
-environment variables. Open Vercel → Project → Settings → Environment
-Variables and confirm both `ZEGO_APP_ID` and `ZEGO_SERVER_SECRET` are set,
-then **redeploy** (env-var changes don't apply to existing deployments).
+The token endpoint generates a **ZegoCloud Token04** using pure Node.js `crypto` — no browser SDK is imported here. This is critical because ZegoCloud's UIKit Prebuilt package accesses `document` at module load time, which crashes in a Node.js serverless environment.
 
-**Refreshing a route gives 404** — make sure `vercel.json` is committed.
-Its rewrite rule is what tells Vercel to serve `index.html` for client-side
-routes.
-
-**Camera/mic blocked** — browsers require **HTTPS** for `getUserMedia`.
-Your `*.vercel.app` URL is HTTPS by default, so this only affects custom
-local setups. Use `localhost` (not your LAN IP) for local dev.
-
-**CORS error in dev** — confirm the local token server is running on the
-port matching `VITE_TOKEN_SERVER_URL`. The dev server replies with
-`Access-Control-Allow-Origin: *` by default.
-
----
-
-## Scripts
-
-| Command                | What it does                                    |
-|------------------------|-------------------------------------------------|
-| `npm run dev`          | Start Vite dev server on `:5173`                |
-| `npm run token-server` | Start local token server on `:3001` (dev only)  |
-| `npm run build`        | Build frontend to `dist/`                       |
-| `npm run preview`      | Preview the production build locally            |
-| `npm run lint`         | Run ESLint                                      |
+```
+GET /api/token?userId=User_1234
+→ { token: "04...", userId: "User_1234" }
+```
 
 ---
 
-## License
+## 🐛 Bugs Fixed During Deployment
 
-MIT
+| Error | Cause | Fix |
+|---|---|---|
+| `ReferenceError: document is not defined` | `api/token.js` imported browser-only ZegoCloud SDK | Rewrote token generation using Node.js `crypto` only |
+| `404: NOT_FOUND` on `/room/:id` refresh | No SPA fallback route in Vercel | Added `/(.*) → /index.html` rewrite in `vercel.json` |
+| `404` on shared invite links | Same as above | Same fix |
+| `403 Forbidden` on preview links | Vercel Deployment Protection enabled | Disabled in Vercel dashboard settings |
+| `[EVAL] Warning` in build logs | ZegoCloud SDK uses `eval` internally | Suppressed via `rolldownOptions.onwarn` in Vite config |
+| Chunk size warning (5MB bundle) | ZegoCloud SDK is large | Raised `chunkSizeWarningLimit` to 6000 |
+| Node engine upgrade warning | `"node": ">=18.0.0"` in package.json | Pinned to `"node": "20.x"` |
+
+---
+
+## 🔐 How Token Authentication Works
+
+```
+Browser (React App)
+       │
+       │  GET /api/token?userId=User_1234
+       ▼
+Vercel Serverless Function (api/token.js)
+       │
+       │  Reads VITE_ZEGO_APP_ID + VITE_ZEGO_SERVER_SECRET
+       │  Generates Token04 using AES-128-CBC (Node.js crypto)
+       │
+       ▼
+Returns { token: "04xxxxx...", userId: "User_1234" }
+       │
+       ▼
+ZegoCloud UIKit uses token to authenticate & join room ✅
+```
+
+Server Secret **never leaves the server** — it's only used inside the serverless function.
+
+---
+
+## 🤝 How to Share a Room
+
+1. Open the app and navigate to a room (e.g. `/room/5`)
+2. Click **"Copy Invite Link"**
+3. Share the link with anyone
+4. They open the link, enter their name, and join the same room
+
+Each room URL is a unique meeting — just change the number for a new room.
+
+---
+
+## 📝 License
+
+MIT License — feel free to contribute.
+
+---
+
+## 🙏 Acknowledgements
+
+- [ZegoCloud](https://www.zegocloud.com/) — video calling SDK
+- [Vite](https://vitejs.dev/) — blazing fast build tool
+- [Vercel](https://vercel.com/) — seamless deployment platform
+- [React](https://react.dev/) — UI library
