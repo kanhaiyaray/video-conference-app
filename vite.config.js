@@ -5,13 +5,5 @@ export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 6000,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          zegocloud: ['@zegocloud/zego-uikit-prebuilt'],
-        },
-      },
-    },
   },
 })
